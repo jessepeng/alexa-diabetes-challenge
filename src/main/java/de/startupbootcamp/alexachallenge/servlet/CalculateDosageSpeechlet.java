@@ -1,6 +1,7 @@
 package de.startupbootcamp.alexachallenge.servlet;
 
 import com.amazon.speech.slu.Intent;
+import com.amazon.speech.slu.Slot;
 import com.amazon.speech.speechlet.*;
 import com.amazon.speech.speechlet.dialog.directives.DelegateDirective;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
@@ -52,11 +53,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
 
         if ("CalculateBolusDose".equals(intentName)) {
             // Check if dialog is complete
-            if (intent.getSlot("food") != null) {
-                return getHelloResponse();
-            } else {
-                return getHelloResponse();
-            }
+            callBolusIntent(request, session);
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
         } else {
@@ -64,13 +61,17 @@ public class CalculateDosageSpeechlet implements Speechlet {
         }
     }
 
+    private SpeechletResponse callBolusIntent(final IntentRequest request, final Session session) {
+        return getInsulineCountAndAskForFoodResponse(7.4);
+    }
+
     private SpeechletResponse getInsulineCountAndAskForFoodResponse(double insulineLevel) {
-        String speechText = "Dein Blutzuckerlevel ist " + insulineLevel + ". Möchtest du etwas essen?";
+        String speechText = "Your blood glucose level is " + insulineLevel + ". Do you want to eat something?";
         // Create the plain text output.
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(speechText);
 
-        return SpeechletResponse.newAskResponse(null, null);
+        return SpeechletResponse.newAskResponse(speech, speech);
     }
 
     private SpeechletResponse getHelloResponse() {
