@@ -52,17 +52,16 @@ public class CalculateDosageSpeechlet implements Speechlet {
 
         if ("CalculateBolusDose".equals(intentName)) {
             // Check if dialog is complete
-            if (request.getDialogState().equals(IntentRequest.DialogState.COMPLETED)) {
+            if (request.getDialogState() != null && request.getDialogState().equals(IntentRequest.DialogState.COMPLETED)) {
                 // Calculate the dose
                 return getHelloResponse();
             } else {
                 // Delegate Dialog completion
-//                SpeechletResponse response = new SpeechletResponse();
-//                List<Directive> directives = new LinkedList<>();
-//                directives.add(new DelegateDirective());
-//                response.setDirectives(directives);
-//                return response;
-                return getHelloResponse();
+                SpeechletResponse response = new SpeechletResponse();
+                List<Directive> directives = new LinkedList<>();
+                directives.add(new DelegateDirective());
+                response.setDirectives(directives);
+                return response;
             }
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
