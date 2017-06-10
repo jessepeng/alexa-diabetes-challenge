@@ -58,7 +58,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
         } else if ("AMAZON.StopIntent".equals(intentName)){
-            return new SpeechletResponse();
+            return getOKResponse();
         } else {
             throw new SpeechletException("Invalid Intent");
         }
@@ -68,9 +68,21 @@ public class CalculateDosageSpeechlet implements Speechlet {
         Slot foodSlot = intent.getSlot("food");
         if (foodSlot.getValue() == null) {
             return getInsulineCountAndAskForFoodResponse(7.4);
-        } else {
+        } else if (!session.isNew()){
             return getBolusCountResponse(foodSlot.getValue());
+        } else {
+            return getOKResponse();
         }
+    }
+
+    private SpeechletResponse getOKResponse() {
+        String speechText = "OK.";
+
+        // Create the plain text output.
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(speechText);
+
+        return SpeechletResponse.newTellResponse(speech);
     }
 
     private SpeechletResponse getBolusCountResponse(String food) {
