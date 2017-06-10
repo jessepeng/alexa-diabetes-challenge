@@ -102,11 +102,11 @@
             <systemProperties>
               <systemProperty>
                 <key>javax.net.ssl.keyStore</key>
-                <value>/insert/your/path/java-keystore.jks</value>
+                <value>~/alexa-challenge/keystore</value>
               </systemProperty>
               <systemProperty>
                 <key>javax.net.ssl.keyStorePassword</key>
-                <value>insert_your_password</value>
+                <value>alexa-challenge</value>
               </systemProperty>
               <systemProperty>
                 <key>com.amazon.speech.speechlet.servlet.disableRequestSignatureCheck</key>
