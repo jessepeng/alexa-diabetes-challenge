@@ -98,7 +98,7 @@
           <artifactId>exec-maven-plugin</artifactId>
           <version>1.2.1</version>
           <configuration>
-            <mainClass>Launcher</mainClass>
+            <mainClass>com.sun.misc.Launcher</mainClass>
             <systemProperties>
               <systemProperty>
                 <key>javax.net.ssl.keyStore</key>
