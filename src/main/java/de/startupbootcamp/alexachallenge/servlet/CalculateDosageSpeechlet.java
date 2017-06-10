@@ -66,7 +66,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
 
     private SpeechletResponse callBolusIntent(final Intent intent, final Session session) {
         Slot foodSlot = intent.getSlot("food");
-        if (foodSlot == null) {
+        if (foodSlot.getValue() == null) {
             return getInsulineCountAndAskForFoodResponse(7.4);
         } else {
             return getBolusCountResponse(foodSlot.getValue());
