@@ -46,7 +46,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
         Intent intent = request.getIntent();
         String intentName = (intent != null) ? intent.getName() : null;
 
-        if ("HelloWorldIntent".equals(intentName)) {
+        if ("CalculateBolusDose".equals(intentName)) {
             return getHelloResponse();
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelloResponse();
