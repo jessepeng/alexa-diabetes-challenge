@@ -54,7 +54,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
 
         if ("CalculateBolusDose".equals(intentName)) {
             // Check if dialog is complete
-            callBolusIntent(request, session);
+            return callBolusIntent(request, session);
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
         } else {
