@@ -57,6 +57,8 @@ public class CalculateDosageSpeechlet implements Speechlet {
             return callBolusIntent(intent, session);
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
+        } else if ("AMAZON.StopIntent".equals(intentName)){
+            return new SpeechletResponse();
         } else {
             throw new SpeechletException("Invalid Intent");
         }
