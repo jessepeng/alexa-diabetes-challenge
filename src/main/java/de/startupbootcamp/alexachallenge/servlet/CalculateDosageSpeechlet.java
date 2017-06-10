@@ -2,9 +2,14 @@ package de.startupbootcamp.alexachallenge.servlet;
 
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.speechlet.*;
+import com.amazon.speech.speechlet.dialog.directives.DelegateDirective;
+import com.amazon.speech.speechlet.dialog.directives.DialogDirective;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Jan-Christopher on 10.06.2017.
@@ -47,9 +52,20 @@ public class CalculateDosageSpeechlet implements Speechlet {
         String intentName = (intent != null) ? intent.getName() : null;
 
         if ("CalculateBolusDose".equals(intentName)) {
-            return getHelloResponse();
+            // Check if dialog is complete
+            if (request.getDialogState().equals(IntentRequest.DialogState.COMPLETED)) {
+                // Calculate the dose
+                return getHelloResponse();
+            } else {
+                // Delegate Dialog completion
+                SpeechletResponse response = new SpeechletResponse();
+                List<Directive> directives = new LinkedList<>();
+                directives.add(new DelegateDirective());
+                response.setDirectives(directives);
+                return response;
+            }
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
-            return getHelloResponse();
+            return getHelpResponse();
         } else {
             throw new SpeechletException("Invalid Intent");
         }
@@ -57,6 +73,16 @@ public class CalculateDosageSpeechlet implements Speechlet {
 
     private SpeechletResponse getHelloResponse() {
         String speechText = "Hello world";
+
+        // Create the plain text output.
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(speechText);
+
+        return SpeechletResponse.newTellResponse(speech);
+    }
+
+    private SpeechletResponse getHelpResponse() {
+        String speechText = "This app will help you determine how much you have to bolus.";
 
         // Create the plain text output.
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
