@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>CalculateDosageSpeechletServlet</servlet-name>
-        <servlet-class>de.startupbootcamp.alexachallenge.CalculateDosageSpeechletServlet</servlet-class>
+        <servlet-class>de.startupbootcamp.alexachallenge.servlet.CalculateDosageSpeechletServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CalculateDosageSpeechletServlet</servlet-name>

@@ -1,4 +1,4 @@
-package de.startupbootcamp.alexachallenge;
+package de.startupbootcamp.alexachallenge.servlet;
 
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.speechlet.*;
