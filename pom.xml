@@ -74,7 +74,7 @@
   </dependencies>
 
   <properties>
-    <property name="disableRequestSignatureCheck" value="false"/>
+    <property name="disableRequestSignatureCheck" value="true"/>
     <property name="supportedApplicationIds" value=""/>
     <property name="timestampTolerance" value="150"/>
   </properties>
