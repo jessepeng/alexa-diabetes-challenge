@@ -54,7 +54,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
 
         if ("CalculateBolusDose".equals(intentName)) {
             // Check if dialog is complete
-            return callBolusIntent(request, session);
+            return callBolusIntent(intent, session);
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
         } else {
@@ -62,8 +62,21 @@ public class CalculateDosageSpeechlet implements Speechlet {
         }
     }
 
-    private SpeechletResponse callBolusIntent(final IntentRequest request, final Session session) {
-        return getInsulineCountAndAskForFoodResponse(7.4);
+    private SpeechletResponse callBolusIntent(final Intent intent, final Session session) {
+        Slot foodSlot = intent.getSlot("food");
+        if (foodSlot == null) {
+            return getInsulineCountAndAskForFoodResponse(7.4);
+        } else {
+            return getBolusCountResponse(foodSlot.getValue());
+        }
+    }
+
+    private SpeechletResponse getBolusCountResponse(String food) {
+        String speechText = food + " contains 45 grams of carbohydrates. You need to bolus 4 units.";
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(speechText);
+
+        return SpeechletResponse.newTellResponse(speech);
     }
 
     private SpeechletResponse getInsulineCountAndAskForFoodResponse(double insulineLevel) {
