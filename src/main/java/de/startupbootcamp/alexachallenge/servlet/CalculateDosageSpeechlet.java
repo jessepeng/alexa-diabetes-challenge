@@ -71,7 +71,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
     }
 
     private SpeechletResponse getHelloResponse() {
-        String speechText = "Hello world";
+        String speechText = "Welcome to bolus count. This app will help you determine how much you have to bolus. Say ask bolus count to calculate my bolus dose to continue.";
 
         // Create the plain text output.
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
