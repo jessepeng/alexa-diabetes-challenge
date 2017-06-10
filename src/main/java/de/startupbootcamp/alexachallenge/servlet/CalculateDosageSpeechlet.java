@@ -52,22 +52,25 @@ public class CalculateDosageSpeechlet implements Speechlet {
 
         if ("CalculateBolusDose".equals(intentName)) {
             // Check if dialog is complete
-            if (request.getDialogState() != null && request.getDialogState().equals(IntentRequest.DialogState.COMPLETED)) {
-                // Calculate the dose
+            if (intent.getSlot("food") != null) {
                 return getHelloResponse();
             } else {
-                // Delegate Dialog completion
-                SpeechletResponse response = new SpeechletResponse();
-                List<Directive> directives = new LinkedList<>();
-                directives.add(new DelegateDirective());
-                response.setDirectives(directives);
-                return response;
+                return getHelloResponse();
             }
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
         } else {
             throw new SpeechletException("Invalid Intent");
         }
+    }
+
+    private SpeechletResponse getInsulineCountAndAskForFoodResponse(double insulineLevel) {
+        String speechText = "Dein Blutzuckerlevel ist " + insulineLevel + ". Möchtest du etwas essen?";
+        // Create the plain text output.
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(speechText);
+
+        return SpeechletResponse.newAskResponse(null, null);
     }
 
     private SpeechletResponse getHelloResponse() {
