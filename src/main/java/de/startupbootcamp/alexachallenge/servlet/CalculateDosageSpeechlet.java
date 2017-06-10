@@ -3,7 +3,6 @@ package de.startupbootcamp.alexachallenge.servlet;
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.speechlet.*;
 import com.amazon.speech.speechlet.dialog.directives.DelegateDirective;
-import com.amazon.speech.speechlet.dialog.directives.DialogDirective;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,11 +57,12 @@ public class CalculateDosageSpeechlet implements Speechlet {
                 return getHelloResponse();
             } else {
                 // Delegate Dialog completion
-                SpeechletResponse response = new SpeechletResponse();
-                List<Directive> directives = new LinkedList<>();
-                directives.add(new DelegateDirective());
-                response.setDirectives(directives);
-                return response;
+//                SpeechletResponse response = new SpeechletResponse();
+//                List<Directive> directives = new LinkedList<>();
+//                directives.add(new DelegateDirective());
+//                response.setDirectives(directives);
+//                return response;
+                return getHelloResponse();
             }
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
