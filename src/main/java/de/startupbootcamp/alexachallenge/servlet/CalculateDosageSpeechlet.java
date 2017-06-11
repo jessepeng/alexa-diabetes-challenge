@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by Jan-Christopher on 10.06.2017.
@@ -85,11 +86,13 @@ public class CalculateDosageSpeechlet implements Speechlet {
         if (foodSlot.getValue() == null && session.isNew()) {
             de.startupbootcamp.alexachallenge.data.User user = userService.getUser();
             double glucoseLevel = bodyLevelService.getGlucoseLevel();
-            session.setAttribute(BLOOD_GLUCOSE, glucoseLevel);
-            return getInsulineCountAndAskForFoodResponse(glucoseLevel, user.getTargetRange());
+            BigDecimal glucoseLevelRounded = new BigDecimal(glucoseLevel).setScale(1, BigDecimal.ROUND_HALF_DOWN);
+
+            session.setAttribute(BLOOD_GLUCOSE, glucoseLevelRounded.doubleValue());
+            return getInsulineCountAndAskForFoodResponse(glucoseLevelRounded.doubleValue(), user.getTargetRange());
         } else if (foodSlot.getValue() != null && !session.isNew()){
             double glucoseLevel = (double)session.getAttribute(BLOOD_GLUCOSE);
-            return getBolusCountResponse(foodSlot.getValue(), glucoseLevel);
+            return getBolusCountResponse(userService.getUser(), foodSlot.getValue(), glucoseLevel);
         } else {
             return getOKResponse();
         }
@@ -105,14 +108,16 @@ public class CalculateDosageSpeechlet implements Speechlet {
         return SpeechletResponse.newTellResponse(speech);
     }
 
-    private SpeechletResponse getBolusCountResponse(String food, double bloodGlucoseLevel) {
+    private SpeechletResponse getBolusCountResponse(User user, String food, double bloodGlucoseLevel) {
         StringBuilder response = new StringBuilder();
         double carbs = foodNutritionService.getCarbsInFood(food);
         BigDecimal rounded = new BigDecimal(carbs).setScale(2, BigDecimal.ROUND_HALF_UP);
         response.append(food);
         response.append(" contains ");
         response.append(rounded.toString());
-        response.append(" grams of carbohydrates. You need to bolus ");
+        response.append(" grams of carbohydrates. With an exchange factor of ");
+        response.append(user.getExchangeFactor(new Date()));
+        response.append(" you need to bolus ");
 
         double bolusCount = userService.calculateBolusDose(userService.getUser(), bloodGlucoseLevel, carbs);
 
@@ -136,7 +141,6 @@ public class CalculateDosageSpeechlet implements Speechlet {
         } else {
             response.append("This is in your desired range. Good. ");
         }
-
 
         response.append("Do you want to eat something?");
         // Create the plain text output.
