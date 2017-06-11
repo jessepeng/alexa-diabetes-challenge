@@ -3,11 +3,9 @@ package de.startupbootcamp.alexachallenge.servlet;
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.slu.Slot;
 import com.amazon.speech.speechlet.*;
-import com.amazon.speech.ui.OutputSpeech;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
 import com.amazon.speech.ui.SsmlOutputSpeech;
-import de.startupbootcamp.alexachallenge.data.*;
 import de.startupbootcamp.alexachallenge.data.User;
 import de.startupbootcamp.alexachallenge.service.*;
 import org.slf4j.Logger;
@@ -145,11 +143,11 @@ public class CalculateDosageSpeechlet implements Speechlet {
             bolusCountFood = userService.calculateFoodBolusDose(userService.getUser(), carbs);
 
             response.append(new BigDecimal(bolusCountFood).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue());
-            response.append(" units.<break time='2s' />Adding ");
+            response.append(" units.<break time='1s' />Using ");
         } else {
             response.append("Okay. With ");
         }
-        response.append(" a correction dose of ");
+        response.append(" a correction factor of ");
         response.append(user.getCorrectionFactor());
         response.append(",  and adjusting to your active insuline, you need to bolus <emphasis>");
         double bolusCountCorrection = userService.calculateCorrectionBolusDose(userService.getUser(), bloodGlucoseLevel) - bodyLevelService.getActiveInsuline();
