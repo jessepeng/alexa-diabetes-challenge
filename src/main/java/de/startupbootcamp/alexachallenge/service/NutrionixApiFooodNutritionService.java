@@ -60,7 +60,7 @@ public class NutrionixApiFooodNutritionService implements FoodNutritionService {
             		qtd = Float.valueOf(qtdS);
             		carbo = Float.valueOf(carboS);
             		
-            		totalCarbo += qtd*carbo;
+            		totalCarbo = carbo;
             		
             		System.out.println("qty: " + qtd + " carbo: " + carbo + " total: " + qtd*carbo );
             	}

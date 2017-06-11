@@ -72,6 +72,8 @@ public class CalculateDosageSpeechlet implements Speechlet {
         if ("CalculateBolusDose".equals(intentName)) {
             // Check if dialog is complete
             return callBolusIntent(intent, session);
+        } else if ("CheckCarbs".equals(intentName)) {
+            return getCarbCountResponse(intent.getSlot("food").getValue());
         } else if ("AMAZON.HelpIntent".equals(intentName)) {
             return getHelpResponse();
         } else if ("AMAZON.StopIntent".equals(intentName)){
@@ -104,6 +106,20 @@ public class CalculateDosageSpeechlet implements Speechlet {
         // Create the plain text output.
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(speechText);
+
+        return SpeechletResponse.newTellResponse(speech);
+    }
+
+    private SpeechletResponse getCarbCountResponse(String food) {
+        StringBuilder response = new StringBuilder();
+        double carbs = foodNutritionService.getCarbsInFood(food);
+        BigDecimal rounded = new BigDecimal(carbs).setScale(2, BigDecimal.ROUND_HALF_UP);
+        response.append(food);
+        response.append(" contains ");
+        response.append(rounded.toString());
+        response.append(" grams of carbohydrates.");
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(response.toString());
 
         return SpeechletResponse.newTellResponse(speech);
     }
