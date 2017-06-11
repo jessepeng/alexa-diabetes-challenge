@@ -144,7 +144,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
 
             bolusCountFood = userService.calculateFoodBolusDose(userService.getUser(), carbs);
 
-            response.append(bolusCountFood);
+            response.append(new BigDecimal(bolusCountFood).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue());
             response.append(" units.<break time='2s' />Adding ");
         } else {
             response.append("Okay. With ");
