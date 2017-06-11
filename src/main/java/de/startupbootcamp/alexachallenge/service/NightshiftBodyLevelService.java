@@ -45,7 +45,7 @@ public class NightshiftBodyLevelService implements BodyLevelService {
             long sgv = (long)jsonEntry.get("sgv");
 
             //TODO: calculate correct levels
-            return sgv;
+            return sgv / 18.0;
 
         } catch (ParseException e) {
             e.printStackTrace();

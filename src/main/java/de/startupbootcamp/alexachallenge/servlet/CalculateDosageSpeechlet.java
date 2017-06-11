@@ -132,9 +132,9 @@ public class CalculateDosageSpeechlet implements Speechlet {
         if (glucoseLevel < glucoseRange.getLower()) {
             response.append("This is very low! Go eat fast carbs. ");
         } else if (glucoseLevel >= glucoseRange.getHigher()) {
-            response.append("This is in your desired range. Good. ");
-        } else {
             response.append("This is too high! ");
+        } else {
+            response.append("This is in your desired range. Good. ");
         }
 
 
