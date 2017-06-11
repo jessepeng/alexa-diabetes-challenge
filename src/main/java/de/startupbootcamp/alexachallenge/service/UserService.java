@@ -16,6 +16,16 @@ public class UserService {
 
     private static final User EXAMPLE_USER;
 
+    private UserService() {}
+
+    private static class ServiceHolder {
+        private static final UserService instance = new UserService();
+    }
+
+    public static UserService getService() {
+        return ServiceHolder.instance;
+    }
+
     static {
         List<User.ExchangeFactor> exchangeFactors = new LinkedList<>();
         Calendar calendar = new GregorianCalendar();
@@ -45,8 +55,16 @@ public class UserService {
                 exchangeFactors);
     }
 
-    public static User getUser() {
+    public User getUser() {
         return EXAMPLE_USER;
+    }
+
+    public double calculateBolusDose(User user, double actualBloodGlucose, double carbsInFood) {
+        return 2.0 + calculateBolusDose(user, actualBloodGlucose);
+    }
+
+    public double calculateBolusDose(User user, double actualBloodGlucose) {
+        return 2.0;
     }
 
 }
