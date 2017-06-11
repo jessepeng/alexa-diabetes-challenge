@@ -32,7 +32,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
     public CalculateDosageSpeechlet() {
         this.foodNutritionService = NutrionixApiFooodNutritionService.getService();
         this.userService = UserService.getService();
-        this.bodyLevelService = FakeBodyLevelService.getService();
+        this.bodyLevelService = NightshiftBodyLevelService.getService();
     }
 
     @Override
