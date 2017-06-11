@@ -3,8 +3,10 @@ package de.startupbootcamp.alexachallenge.servlet;
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.slu.Slot;
 import com.amazon.speech.speechlet.*;
+import com.amazon.speech.ui.OutputSpeech;
 import com.amazon.speech.ui.PlainTextOutputSpeech;
 import com.amazon.speech.ui.Reprompt;
+import com.amazon.speech.ui.SsmlOutputSpeech;
 import de.startupbootcamp.alexachallenge.data.*;
 import de.startupbootcamp.alexachallenge.data.User;
 import de.startupbootcamp.alexachallenge.service.*;
@@ -128,6 +130,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
 
     private SpeechletResponse getBolusCountResponse(User user, String food, double bloodGlucoseLevel) {
         StringBuilder response = new StringBuilder();
+        response.append("<speak>");
         double bolusCountFood = 0;
         if (food != null) {
             double carbs = foodNutritionService.getCarbsInFood(food);
@@ -135,26 +138,27 @@ public class CalculateDosageSpeechlet implements Speechlet {
             response.append(food);
             response.append(" contains ");
             response.append(rounded.toString());
-            response.append(" grams of carbohydrates. With an exchange factor of ");
+            response.append(" grams of carbohydrates.<break time='1s' />With an exchange factor of ");
             response.append(user.getExchangeFactor(new Date()));
             response.append(" you need to bolus ");
 
             bolusCountFood = userService.calculateBolusDose(userService.getUser(), bloodGlucoseLevel, carbs);
 
             response.append(bolusCountFood);
-            response.append(" units. Adding ");
+            response.append(" units.<break time='2s' />Adding ");
         } else {
-            response.append("With ");
+            response.append("Okay. With ");
         }
         response.append(" a correction dose of ");
         response.append(user.getCorrectionFactor());
-        response.append("  and adjusting to your active insuline, you need to bolus ");
+        response.append("  and adjusting to your active insuline, you need to bolus <emphasis>");
         double bolusCountCorrection = userService.calculateBolusDose(userService.getUser(), bloodGlucoseLevel);
         response.append(new BigDecimal(bolusCountCorrection + bolusCountFood).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue());
-        response.append(" units");
-        
-        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-        speech.setText(response.toString());
+        response.append("</emphasis> units");
+
+        response.append("</speak>");
+        SsmlOutputSpeech speech = new SsmlOutputSpeech();
+        speech.setSsml(response.toString());
 
         return SpeechletResponse.newTellResponse(speech);
     }
