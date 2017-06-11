@@ -2,10 +2,7 @@ package de.startupbootcamp.alexachallenge.service;
 
 import de.startupbootcamp.alexachallenge.data.User;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Stub for looking up the user
@@ -59,12 +56,20 @@ public class UserService {
         return EXAMPLE_USER;
     }
 
-    public double calculateBolusDose(User user, double actualBloodGlucose, double carbsInFood) {
-        return 2.0 + calculateBolusDose(user, actualBloodGlucose);
+    public double calculateFoodBolusDose(User user, double carbsInFood) {
+        double be = carbsInFood / 12.0;
+        double exchangeFactor = user.getExchangeFactor(new Date());
+        return exchangeFactor * be;
     }
 
-    public double calculateBolusDose(User user, double actualBloodGlucose) {
-        return 2.0;
+    public double calculateCorrectionBolusDose(User user, double actualBloodGlucose) {
+        User.Range targetRange = user.getTargetRange();
+        if (actualBloodGlucose > targetRange.getLower()) {
+            double difference = actualBloodGlucose - targetRange.getLower();
+            return difference / user.getCorrectionFactor();
+        } else {
+            return 0;
+        }
     }
 
 }

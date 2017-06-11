@@ -142,7 +142,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
             response.append(user.getExchangeFactor(new Date()));
             response.append(", you need to bolus ");
 
-            bolusCountFood = userService.calculateBolusDose(userService.getUser(), bloodGlucoseLevel, carbs);
+            bolusCountFood = userService.calculateFoodBolusDose(userService.getUser(), carbs);
 
             response.append(bolusCountFood);
             response.append(" units.<break time='2s' />Adding ");
@@ -152,7 +152,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
         response.append(" a correction dose of ");
         response.append(user.getCorrectionFactor());
         response.append(",  and adjusting to your active insuline, you need to bolus <emphasis>");
-        double bolusCountCorrection = userService.calculateBolusDose(userService.getUser(), bloodGlucoseLevel);
+        double bolusCountCorrection = userService.calculateCorrectionBolusDose(userService.getUser(), bloodGlucoseLevel);
         response.append(new BigDecimal(bolusCountCorrection + bolusCountFood).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue());
         response.append("</emphasis> units");
 
