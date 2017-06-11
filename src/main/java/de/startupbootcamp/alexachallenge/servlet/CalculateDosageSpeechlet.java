@@ -136,9 +136,9 @@ public class CalculateDosageSpeechlet implements Speechlet {
             double carbs = foodNutritionService.getCarbsInFood(food);
             BigDecimal rounded = new BigDecimal(carbs).setScale(2, BigDecimal.ROUND_HALF_UP);
             response.append(food);
-            response.append(" contains ");
+            response.append(" contains <emphasis>");
             response.append(rounded.toString());
-            response.append(" grams of carbohydrates.<break time='1s' />With an exchange factor of ");
+            response.append("</emphasis> grams of carbohydrates.<break time='1s' />With an exchange factor of ");
             response.append(user.getExchangeFactor(new Date()));
             response.append(", you need to bolus ");
 
