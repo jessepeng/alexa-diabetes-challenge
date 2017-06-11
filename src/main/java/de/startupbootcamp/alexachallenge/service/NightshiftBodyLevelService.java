@@ -29,6 +29,8 @@ public class NightshiftBodyLevelService implements BodyLevelService {
     }
 
 	private static final String API_URL = "https://Hackathon2017@alexadiabeteschallenge.azurewebsites.net/api/v1/";
+
+    private static final boolean USE_INSULINE_DECAY = true;
 	
 	@Override
 	public double getGlucoseLevel() {
@@ -56,30 +58,32 @@ public class NightshiftBodyLevelService implements BodyLevelService {
     }
 	
 	public double getActiveInsuline() {
-        String result = this.makeGETRequest(API_URL + "treatments");
+	    if (USE_INSULINE_DECAY) {
+            String result = this.makeGETRequest(API_URL + "treatments");
 
-        JSONParser parser = new JSONParser();
-        try {
-            Object object = parser.parse(result);
+            JSONParser parser = new JSONParser();
+            try {
+                Object object = parser.parse(result);
 
-            //convert Object to JSONObject
-            JSONArray array = (JSONArray) object;
+                //convert Object to JSONObject
+                JSONArray array = (JSONArray) object;
 
-            // get first entry
-            if (array.size() > 0) {
-                Object entry = array.get(0);
-                JSONObject jsonEntry = (JSONObject) entry;
-                double insuline = (double) jsonEntry.get("insuline");
-                Long millisecondsIns = Long.valueOf((String)jsonEntry.get("created_at"));
-                Long millisecondsNow = new Date().getTime();
+                // get first entry
+                if (array.size() > 0) {
+                    Object entry = array.get(0);
+                    JSONObject jsonEntry = (JSONObject) entry;
+                    double insuline = (double) jsonEntry.get("insuline");
+                    Long millisecondsIns = Long.valueOf((String) jsonEntry.get("created_at"));
+                    Long millisecondsNow = new Date().getTime();
 
-                long elapsedSeconds = (millisecondsNow - millisecondsIns) / 1000;
+                    long elapsedSeconds = (millisecondsNow - millisecondsIns) / 1000;
 
-                return (1.0 / (Math.sqrt(2 * Math.PI))) + Math.exp(-(1.0/2.0) * Math.pow(elapsedSeconds + 360, 2.0)) * insuline;
+                    return (1.0 / (Math.sqrt(2 * Math.PI))) + Math.exp(-(1.0 / 2.0) * Math.pow(elapsedSeconds + 360, 2.0)) * insuline;
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
         return 0;
 	}
