@@ -12,6 +12,9 @@ import org.json.simple.parser.ParseException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class NightshiftBodyLevelService implements BodyLevelService {
 
@@ -44,7 +47,6 @@ public class NightshiftBodyLevelService implements BodyLevelService {
             JSONObject jsonEntry = (JSONObject)entry;
             long sgv = (long)jsonEntry.get("sgv");
 
-            //TODO: calculate correct levels
             return sgv / 18.0;
 
         } catch (ParseException e) {
@@ -54,7 +56,32 @@ public class NightshiftBodyLevelService implements BodyLevelService {
     }
 	
 	public double getActiveInsuline() {
-        return 0 ; 
+        String result = this.makeGETRequest(API_URL + "treatments");
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object object = parser.parse(result);
+
+            //convert Object to JSONObject
+            JSONArray array = (JSONArray) object;
+
+            // get first entry
+            if (array.size() > 0) {
+                Object entry = array.get(0);
+                JSONObject jsonEntry = (JSONObject) entry;
+                double insuline = (double) jsonEntry.get("insuline");
+                Long millisecondsIns = Long.valueOf((String)jsonEntry.get("created_at"));
+                Long millisecondsNow = new Date().getTime();
+
+                long elapsedSeconds = (millisecondsNow - millisecondsIns) / 1000;
+
+                return (1.0 / (Math.sqrt(2 * Math.PI))) + Math.exp(-(1.0/2.0) * Math.pow(elapsedSeconds + 360, 2.0)) * insuline;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
 	}
 	
 	private String makeGETRequest(String apiURL) {
