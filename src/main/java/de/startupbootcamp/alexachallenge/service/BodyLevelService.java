@@ -5,7 +5,7 @@ package de.startupbootcamp.alexachallenge.service;
  */
 public interface BodyLevelService {
 
-    double getGlucseLevel();
+    double getGlucoseLevel();
 
     double getActiveInsuline();
 

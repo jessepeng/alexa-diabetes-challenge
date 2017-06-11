@@ -84,7 +84,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
         Slot foodSlot = intent.getSlot("food");
         if (foodSlot.getValue() == null && session.isNew()) {
             de.startupbootcamp.alexachallenge.data.User user = userService.getUser();
-            double glucoseLevel = bodyLevelService.getGlucseLevel();
+            double glucoseLevel = bodyLevelService.getGlucoseLevel();
             session.setAttribute(BLOOD_GLUCOSE, glucoseLevel);
             return getInsulineCountAndAskForFoodResponse(glucoseLevel, user.getTargetRange());
         } else if (foodSlot.getValue() != null && !session.isNew()){
