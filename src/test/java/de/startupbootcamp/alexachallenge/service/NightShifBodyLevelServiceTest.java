@@ -12,7 +12,13 @@ public class NightShifBodyLevelServiceTest {
     @Test
     public void testBodyGlucose() {
         double glucoseLevel = service.getGlucoseLevel();
+    }
 
+    @Test
+    public void testLastInsuline() {
+        double elapsedSeconds = 60 * 60 * 3;
+        double insuline = 4.5;
+        double resultInsuline = (1.0 / (Math.sqrt(2 * Math.PI))) + Math.exp(-(1.0 / 2.0) * Math.pow(elapsedSeconds + 3600, 2.0)) * insuline;
     }
 
 }

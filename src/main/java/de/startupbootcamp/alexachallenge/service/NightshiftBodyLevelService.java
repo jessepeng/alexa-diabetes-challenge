@@ -1,5 +1,6 @@
 package de.startupbootcamp.alexachallenge.service;
 
+import de.startupbootcamp.alexachallenge.data.User;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -12,9 +13,7 @@ import org.json.simple.parser.ParseException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class NightshiftBodyLevelService implements BodyLevelService {
 
@@ -72,13 +71,18 @@ public class NightshiftBodyLevelService implements BodyLevelService {
                 if (array.size() > 0) {
                     Object entry = array.get(0);
                     JSONObject jsonEntry = (JSONObject) entry;
-                    double insuline = (double) jsonEntry.get("insuline");
-                    Long millisecondsIns = Long.valueOf((String) jsonEntry.get("created_at"));
+                    double insuline = (double) jsonEntry.get("insulin");
+                    Long millisecondsIns;
+                    try {
+                        millisecondsIns = Long.valueOf((String) jsonEntry.get("created_at"));
+                    } catch (Exception e) {
+                        return 0;
+                    }
                     Long millisecondsNow = new Date().getTime();
 
                     long elapsedSeconds = (millisecondsNow - millisecondsIns) / 1000;
 
-                    return (1.0 / (Math.sqrt(2 * Math.PI))) + Math.exp(-(1.0 / 2.0) * Math.pow(elapsedSeconds + 360, 2.0)) * insuline;
+                    return (1.0 / (Math.sqrt(2 * Math.PI))) + Math.exp(-(1.0 / 2.0) * Math.pow(elapsedSeconds + 3600, 2.0)) * insuline;
                 }
 
             } catch (ParseException e) {
