@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 
 public class NightshiftBodyLevelService implements BodyLevelService {
 
-    private NightshiftBodyLevelService() {}
+    protected NightshiftBodyLevelService() {}
 
     private static class ServiceHolder {
         private static final NightshiftBodyLevelService instance = new NightshiftBodyLevelService();
@@ -42,7 +42,7 @@ public class NightshiftBodyLevelService implements BodyLevelService {
             // get first entry
             Object entry = array.get(0);
             JSONObject jsonEntry = (JSONObject)entry;
-            double sgv = (double)jsonEntry.get("sgv");
+            long sgv = (long)jsonEntry.get("sgv");
 
             //TODO: calculate correct levels
             return sgv;

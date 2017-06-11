@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 
 public class NutrionixApiFooodNutritionService implements FoodNutritionService {
 
-    private NutrionixApiFooodNutritionService() {}
+    protected NutrionixApiFooodNutritionService() {}
 
     private static class ServiceHolder {
         private static final NutrionixApiFooodNutritionService instance = new NutrionixApiFooodNutritionService();
