@@ -140,7 +140,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
             response.append(rounded.toString());
             response.append(" grams of carbohydrates.<break time='1s' />With an exchange factor of ");
             response.append(user.getExchangeFactor(new Date()));
-            response.append(" you need to bolus ");
+            response.append(", you need to bolus ");
 
             bolusCountFood = userService.calculateBolusDose(userService.getUser(), bloodGlucoseLevel, carbs);
 
