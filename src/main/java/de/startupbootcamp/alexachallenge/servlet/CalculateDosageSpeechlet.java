@@ -86,14 +86,16 @@ public class CalculateDosageSpeechlet implements Speechlet {
     private SpeechletResponse callBolusIntent(final Intent intent, final Session session) {
         Slot foodSlot = intent.getSlot("food");
         if (foodSlot.getValue() == null && session.isNew()) {
+            // User asks for bolus count
             de.startupbootcamp.alexachallenge.data.User user = userService.getUser();
             double glucoseLevel = bodyLevelService.getGlucoseLevel();
             BigDecimal glucoseLevelRounded = new BigDecimal(glucoseLevel).setScale(1, BigDecimal.ROUND_HALF_DOWN);
 
             session.setAttribute(BLOOD_GLUCOSE, glucoseLevelRounded.doubleValue());
             return getInsulineCountAndAskForFoodResponse(glucoseLevelRounded.doubleValue(), user.getTargetRange());
-        } else if (foodSlot.getValue() != null && !session.isNew()){
-            double glucoseLevel = (double)session.getAttribute(BLOOD_GLUCOSE);
+        } else if (!session.isNew()) {
+            // User returned with food item
+            double glucoseLevel = (double) session.getAttribute(BLOOD_GLUCOSE);
             return getBolusCountResponse(userService.getUser(), foodSlot.getValue(), glucoseLevel);
         } else {
             return getOKResponse();
@@ -126,19 +128,31 @@ public class CalculateDosageSpeechlet implements Speechlet {
 
     private SpeechletResponse getBolusCountResponse(User user, String food, double bloodGlucoseLevel) {
         StringBuilder response = new StringBuilder();
-        double carbs = foodNutritionService.getCarbsInFood(food);
-        BigDecimal rounded = new BigDecimal(carbs).setScale(2, BigDecimal.ROUND_HALF_UP);
-        response.append(food);
-        response.append(" contains ");
-        response.append(rounded.toString());
-        response.append(" grams of carbohydrates. With an exchange factor of ");
-        response.append(user.getExchangeFactor(new Date()));
-        response.append(" you need to bolus ");
+        double bolusCountFood = 0;
+        if (food != null) {
+            double carbs = foodNutritionService.getCarbsInFood(food);
+            BigDecimal rounded = new BigDecimal(carbs).setScale(2, BigDecimal.ROUND_HALF_UP);
+            response.append(food);
+            response.append(" contains ");
+            response.append(rounded.toString());
+            response.append(" grams of carbohydrates. With an exchange factor of ");
+            response.append(user.getExchangeFactor(new Date()));
+            response.append(" you need to bolus ");
 
-        double bolusCount = userService.calculateBolusDose(userService.getUser(), bloodGlucoseLevel, carbs);
+            bolusCountFood = userService.calculateBolusDose(userService.getUser(), bloodGlucoseLevel, carbs);
 
-        response.append(bolusCount);
-        response.append(" units.");
+            response.append(bolusCountFood);
+            response.append(" units. Adding ");
+        } else {
+            response.append("With ");
+        }
+        response.append(" a correction dose of ");
+        response.append(user.getCorrectionFactor());
+        response.append("  and adjusting to your active insuline, you need to bolus ");
+        double bolusCountCorrection = userService.calculateBolusDose(userService.getUser(), bloodGlucoseLevel);
+        response.append(new BigDecimal(bolusCountCorrection + bolusCountFood).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue());
+        response.append(" units");
+        
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(response.toString());
 
@@ -148,17 +162,16 @@ public class CalculateDosageSpeechlet implements Speechlet {
     private SpeechletResponse getInsulineCountAndAskForFoodResponse(double glucoseLevel, User.Range glucoseRange) {
         StringBuilder response = new StringBuilder("I will do that. Your current blood glucose level is ");
         response.append(glucoseLevel);
-        response.append(". ");
+        response.append("millimol per liter. ");
 
         if (glucoseLevel < glucoseRange.getLower()) {
-            response.append("This is very low! Go eat fast carbs. ");
+            response.append("This is low! You should eat something. Do you want to?");
         } else if (glucoseLevel >= glucoseRange.getHigher()) {
-            response.append("This is too high! ");
+            response.append("This is too high!  You shouldn't eat something. Do you still want to?");
         } else {
-            response.append("This is in your desired range. Good. ");
+            response.append("This is in your desired range. Good. Do you want to eat something?");
         }
 
-        response.append("Do you want to eat something?");
         // Create the plain text output.
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(response.toString());
