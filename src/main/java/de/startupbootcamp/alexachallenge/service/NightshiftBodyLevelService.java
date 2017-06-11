@@ -1,6 +1,5 @@
 package de.startupbootcamp.alexachallenge.service;
 
-import de.startupbootcamp.alexachallenge.data.User;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -29,7 +28,7 @@ public class NightshiftBodyLevelService implements BodyLevelService {
 
 	private static final String API_URL = "https://Hackathon2017@alexadiabeteschallenge.azurewebsites.net/api/v1/";
 
-    private static final boolean USE_INSULINE_DECAY = true;
+    private static final boolean USE_INSULINE_DECAY = false;
 	
 	@Override
 	public double getGlucoseLevel() {
