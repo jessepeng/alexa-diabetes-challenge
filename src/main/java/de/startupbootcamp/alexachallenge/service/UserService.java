@@ -41,6 +41,7 @@ public class UserService {
         exchangeFactors.add(new User.ExchangeFactor(calendar.getTime(), 1.0));
         // 18:00 - 24:00
         calendar.add(Calendar.HOUR, 6);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
         exchangeFactors.add(new User.ExchangeFactor(calendar.getTime(), 1.25));
         EXAMPLE_USER = new User(
                 60.0,
