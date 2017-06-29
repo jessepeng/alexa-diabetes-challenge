@@ -115,7 +115,8 @@ public class User {
                 return factor.getFactor();
             }
         }
-        throw new IllegalStateException("The exchange factors are not set correctly.");
+        return exchangeFactors.get(0).getFactor();
+        //throw new IllegalStateException("The exchange factors are not set correctly.");
     }
 
     public double getExchangeFactor() {
