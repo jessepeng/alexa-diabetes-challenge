@@ -34,13 +34,13 @@ public class UserService {
         // 0:00 - 5:00
         exchangeFactors.add(new User.ExchangeFactor(calendar.getTime(), 0.5));
         // 5:00 - 12:00
-        calendar.add(Calendar.HOUR_OF_DAY, 7);
+        calendar.add(Calendar.HOUR, 7);
         exchangeFactors.add(new User.ExchangeFactor(calendar.getTime(), 1.5));
         // 12:00 - 18:00
-        calendar.add(Calendar.HOUR_OF_DAY, 6);
+        calendar.add(Calendar.HOUR, 6);
         exchangeFactors.add(new User.ExchangeFactor(calendar.getTime(), 1.0));
         // 18:00 - 24:00
-        calendar.add(Calendar.HOUR_OF_DAY, 6);
+        calendar.add(Calendar.HOUR, 6);
         exchangeFactors.add(new User.ExchangeFactor(calendar.getTime(), 1.25));
         EXAMPLE_USER = new User(
                 60.0,
