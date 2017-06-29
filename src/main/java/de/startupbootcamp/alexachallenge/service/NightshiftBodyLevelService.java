@@ -46,11 +46,13 @@ public class NightshiftBodyLevelService implements BodyLevelService {
             Object entry = array.get(0);
             JSONObject jsonEntry = (JSONObject)entry;
             Object sgvValue = jsonEntry.get("sgv");
-            long sgv;
+            double sgv;
             if (sgvValue instanceof String) {
-                sgv = Long.valueOf((String)sgvValue);
+                sgv = Double.valueOf((String)sgvValue);
             } else if (sgvValue instanceof Long) {
                 sgv = (Long) sgvValue;
+            } else if (sgvValue instanceof Double) {
+                sgv = (Double) sgvValue;
             } else {
                 sgv = 0;
             }
