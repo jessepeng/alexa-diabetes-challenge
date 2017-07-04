@@ -43,21 +43,26 @@ public class NightshiftBodyLevelService implements BodyLevelService {
             JSONArray array = (JSONArray) object;
 
             // get first entry
-            Object entry = array.get(0);
-            JSONObject jsonEntry = (JSONObject)entry;
-            Object sgvValue = jsonEntry.get("sgv");
-            double sgv;
-            if (sgvValue instanceof String) {
-                sgv = Double.valueOf((String)sgvValue);
-            } else if (sgvValue instanceof Long) {
-                sgv = (Long) sgvValue;
-            } else if (sgvValue instanceof Double) {
-                sgv = (Double) sgvValue;
-            } else {
-                sgv = 0;
-            }
+            if (array.size() > 0) {
+                Object entry = array.get(0);
+                JSONObject jsonEntry = (JSONObject) entry;
+                Object sgvValue = jsonEntry.get("sgv");
+                double sgv;
+                if (sgvValue instanceof String) {
+                    sgv = Double.valueOf((String) sgvValue);
+                } else if (sgvValue instanceof Long) {
+                    sgv = (Long) sgvValue;
+                } else if (sgvValue instanceof Double) {
+                    sgv = (Double) sgvValue;
+                } else {
+                    sgv = 0;
+                }
 
-            return sgv / 18.0;
+                return sgv / 18.0;
+
+            } else {
+                return 10.6;
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
