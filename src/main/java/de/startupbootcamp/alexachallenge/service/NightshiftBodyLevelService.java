@@ -67,7 +67,7 @@ public class NightshiftBodyLevelService implements BodyLevelService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return 5.5;
+        return 6.5;
     }
 	
 	public double getActiveInsuline() {
