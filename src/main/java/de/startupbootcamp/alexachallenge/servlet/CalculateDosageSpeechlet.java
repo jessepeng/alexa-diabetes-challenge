@@ -164,7 +164,7 @@ public class CalculateDosageSpeechlet implements Speechlet {
     private SpeechletResponse getInsulineCountAndAskForFoodResponse(double glucoseLevel, User.Range glucoseRange) {
         StringBuilder response = new StringBuilder("I will do that. Your current blood glucose level is ");
         response.append(glucoseLevel);
-        response.append("millimol per liter. ");
+        response.append(" millimol per liter. ");
 
         if (glucoseLevel < glucoseRange.getLower()) {
             response.append("This is low! You should eat something. Do you want to?");
